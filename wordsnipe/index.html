@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <title>ワードスナイプ</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta name="description" content="wordleの日本語版を遊びやすく改変。">
+        <meta name="author" content="inertia-yehu (Twitter: @ToutDevientF)">
+        <meta name="application-name" content="ワードスナイプ">
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="shortcut icon" href="favicon.ico">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!--
+            https://github.com/inertia-yehu/inertia-yehu.github.io/tree/main/wordsnipe
+            のLISENCESを確認ください。GPL, LGPL, BSDが適用されています。
+        -->
+    </head>
+    <body>
+      <div id="wrapper">
+        <h1 style="margin-top:36px">ワードスナイプ</h1>
+        <div id="wrapper-explain">
+          <div class="work-description">
+              <div id="button-close" onclick="close_it()">
+                <span> × </span>
+              </div>
+              <p style="margin-top: 1em">
+                  ひらがな４字の言葉を当ててください。 <br>
+                  解答するたびに、ヒントとして文字に色がつきます。<br>
+                  解答には辞書にある単語しか入力できません。
+              </p>
+              <hr style="margin:2em 0">
+              <p> 例：</p>
+              <div class="example">
+                <p>
+                  <span class="used">さ</span>
+                  <span class="green">い</span>
+                  <span class="used">し</span>
+                  <span class="used">ょ</span>
+                </p>
+                <p><b>い</b> は正しい位置にあります。他の字はどこにも使われていません。</p>
+              </div>
+              <div class="example">
+                <p>
+                  <span class="yellow">か</span>
+                  <span class="yellow">が</span>
+                  <span class="used">や</span>
+                  <span class="used">く</span>
+                </p>
+                <p><b>か</b> か <b>が</b> が別の場所に入るようです。判定時に濁点や半濁点、「や」と「ゃ」は区別されません。</p>
+              </div>
+              <div class="example">
+                <p>
+                  <span class="used">お</span>
+                  <span class="used">お</span>
+                  <span class=" red">ぞ</span>
+                  <span class="used">ら</span>
+                </p>
+                <p><b>そ</b> の字は正解に含まれませんが、
+                ５０音表で <b>そ</b> の隣にある字（こ、せ、と）のどれかが含まれるようです。</p>
+              </div>
+              <p>
+                  答えは「せいかい」です。
+              </p>
+              <p style="text-align:center">
+                <button id="close_bottom" onclick="close_it()"> 閉じる </button>
+              </p>
+          </div>
+        </div>
+        <div class="slot-wrapper">
+            <div id="slot"></div>
+        </div>
+   <!--     <div id="share", class="small">
+            <button id="share-button" onclick="share()">
+                SNSで共有
+            </button>
+   </div>-->
+        <button id="onemoreshot-button" onclick="restart()">
+            もう１回遊ぶ！
+        </button>
+        <div id="answer-input">
+            <input type="text" id="text-box" onkeydown="enterSubmit()" placeholder="・・・・"/>
+            <button id="answer-input-button" onclick="submit()">
+                解答
+            </button>
+        </div>
+        <div id="caution-area"></div>
+        <div class="gojuon-area-wrapper">
+            <div id="gojuon-area"></div>
+        </div>
+        <br><br>
+        <button id="rule-button" onclick="showRule()"> 遊び方 </button>
+        <br><br>
+        <br><br>
+        <div class="credit, small">
+            ・
+            <p>
+                ゲーム原案：KUROゴマさん、Wordle <br>
+                実装 <a href="http://twitter.com/ToutDevientF">@ToutDevientF</a>
+                (<a href="https://github.com/inertia-yehu/inertia-yehu.github.io/tree/main/wordsnipe">github</a>)
+            </p>
+            ・
+            <p> 語彙の選定に以下のデータベースを利用しています。<br>
+            優れた研究成果の一般公開に感謝します。</p>
+            <p>
+            『
+              <a href="https://ccd.ninjal.ac.jp/unidic/">
+              現代書き言葉UniDic ver3.1
+              </a>
+              』<br>『
+              <a href="https://ccd.ninjal.ac.jp/goihyo.html">
+                分類語彙表－増補改訂版データベース</a> 』<br>
+              (国立国語研究所）</p><p>
+              『<a href="http://www17408ui.sakura.ne.jp/tatsum/database.html">
+              日本語を読むための語彙データベース（教師用）</a>
+              』<br>
+              （東京大学松下達彦研究室・松下言語学習ラボ）<br>
+            </p>
+        </div>
+      </div>
+      <script src="dict.js"></script>
+      <script src="main.js"></script>
+    </body>
+</html>
