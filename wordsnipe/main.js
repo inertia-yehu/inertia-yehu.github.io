@@ -6,7 +6,8 @@ var newestAnswer_seion = "     ";
 var attempt = 0;
 var correctLetter = 0;
 var endgame = false;
-var submittedCharacters = [];
+var submittedCharacters = "";
+var submittedDakuon= [];
 var correctCharacters = [];
 var grazeCharacters = [];
 var graze_index = [];
@@ -23,7 +24,61 @@ var seed = "";
 
 var seed = (todayNumber * 16807 % 2147483647) % answers.length;
 
+// localstorage
+var ls_record = JSON.parse(localStorage.getItem("record"));
+var ls_char   = localStorage.getItem("char");
+var ls_dakuon = JSON.parse(localStorage.getItem("dakuon"));
+var ls_gameid = JSON.parse(localStorage.getItem("gameid"));
+if ( ls_record ) {;} else { ls_record = [0,0,0,0,0,0,0,0,0,0,0]; };
+if (ls_gameid == todayString) {
+    if ( ls_char ) { submittedCharacters = ls_char };
+    if ( ls_dakuon ) { submittedDakuon = ls_dakuon };
+} else {
+    ls_dakuon = []; ls_gameid = []; writedownCookie();
+};
+
+function writedownCookie() {
+    localStorage["char"] = submittedCharacters;
+    localStorage["dakuon"] = JSON.stringify(submittedDakuon);
+    localStorage["gameid"] = todayString;
+}
+
 initialize(seed); // 初回の初期化
+
+function initialize(seed) {
+    correctAnswer = answers[seed];
+    correctAnswer_kaki = answer_kaki[seed];
+    correctAnswer_seion = seionka(correctAnswer);
+    for (let i=0; i<4; i++) {
+      correctAnswer_index[i] = gojuon_seion.indexOf(correctAnswer_seion[i])
+    }
+    graze_index = getGraze(correctAnswer_index)
+    newestAnswer = "     ";
+    newestAnswer_seion = "     ";
+    endgame = false;
+    let el = document.getElementById('onemoreshot-button')
+    el.style.display= "none";
+
+    if ( game_number == 0 ) {
+        const textArea = document.getElementById("slot");
+        for ( let i=0; i<submittedDakuon.length; i++) {
+            textArea.appendChild(makeAnswerDisplayNodes(submittedDakuon[i], submittedCharacters.substr(i*4,4)));
+        };
+        if ( correctAnswer == submittedDakuon.slice(-1)[0]) {
+            finalize( false );
+        }
+    } else {
+        submittedCharacters = "";
+        correctCharacters = [];
+        grazeCharacters = [];
+    }
+
+    game_number ++;
+    attempt = 0;
+    correctLetter = 0;
+
+    makeGojuon();
+}
 
 function seionka(input) {
     let output = input;
@@ -49,29 +104,6 @@ function getGraze(index) {
 };
 
 
-function initialize(seed) {
-    correctAnswer = answers[seed];
-    correctAnswer_kaki = answer_kaki[seed];
-    correctAnswer_seion = seionka(correctAnswer);
-    for (let i=0; i<4; i++) {
-      correctAnswer_index[i] = gojuon_seion.indexOf(correctAnswer_seion[i])
-    }
-    newestAnswer = "     ";
-    newestAnswer_seion = "     ";
-    submittedCharacters = [];
-    correctCharacters = [];
-    grazeCharacters = [];
-    graze_index = getGraze(correctAnswer_index)
-
-    game_number ++;
-    attempt = 0;
-    correctLetter = 0;
-    endgame = false;
-    let el = document.getElementById('onemoreshot-button')
-    el.style.display= "none";
-    makeGojuon();
-}
-
 
 //回答を入力したとき
 function submit() {
@@ -85,7 +117,12 @@ function submit() {
             newestAnswer = input;
             newestAnswer_seion = seionka(newestAnswer);
 
+            submittedCharacters += newestAnswer_seion;
+            submittedDakuon.push(newestAnswer);
             renderAnswer(newestAnswer, newestAnswer_seion);
+            if (game_number == 1) {
+              writedownCookie();
+            }
         } else {
             document.getElementById("caution-area").innerText = input+"は辞書にありません";
         }
@@ -101,37 +138,92 @@ function check(input) { //辞書にありますか
     }
 }
 
-// 再描画
+// 再描画 submitされたときのみ
 function renderAnswer(input, input_seion) {
     const textArea = document.getElementById("slot");
-    correctLetter = 0;
     textArea.appendChild(makeAnswerDisplayNodes(input, input_seion));
     makeGojuon();
-    if(correctLetter == 4) {
-        var p = document.createElement("p");
-        p.classList.add("correct");
-        p.innerText = correctAnswer_kaki+"（"+correctAnswer+"）";
-        textArea.appendChild(p);
-        endgame = true;
 
-        if (game_number == 1) {
-            make_game_log();
-            let div_btn = document.createElement("div");
-            div_btn.setAttribute("id", "share");
-            let button = document.createElement("button");
-            button.innerText = "SNSに投稿";
-            button.setAttribute("id", "share-button");
-            button.setAttribute("onclick", "share()");
-            div_btn.appendChild(button);
-            textArea.appendChild(div_btn);
-        }
-
-        let em = document.getElementById('onemoreshot-button')
-        em.style.display= "inline";
-        let el = document.getElementById('answer-input')
-        el.style.display= "none";
-        document.getElementById("caution-area").innerText = "";
+    if(correctLetter == 4) { //正解してたら
+        //finalize(game_number==1); 
+        finalize(true); 
     }
+}
+
+function finalize( add_cookie ) {
+    if ( add_cookie ) {
+        if (attempt <= 10) { // cookieのrecordを更新
+            ls_record[attempt-1] ++;
+        } else {
+            ls_record[10] ++;
+        };
+        localStorage['record'] = JSON.stringify(ls_record);
+    };
+
+    const textArea = document.getElementById("slot");
+    var p = document.createElement("p");
+    p.classList.add("correct");
+    p.innerText = correctAnswer_kaki+"（"+correctAnswer+"）";
+    textArea.appendChild(p);
+    show_record();
+    endgame = true;
+
+    if ( 0 <=game_number && game_number <= 1 ) { // 0-> initialize; 1-> firstgame
+        make_game_log();
+        let div_btn = document.createElement("div");
+        div_btn.setAttribute("id", "share");
+        let button = document.createElement("button");
+        button.innerText = "SNSに投稿";
+        button.setAttribute("id", "share-button");
+        button.setAttribute("onclick", "share()");
+        div_btn.appendChild(button);
+        textArea.appendChild(div_btn);
+//        let button2 = document.createElement("button");
+//        button2.innerText = "記録";
+//        button2.setAttribute("id", "record-button");
+//        button2.setAttribute("onclick", "show_record()");
+//        div_btn.appendChild(button2);
+
+    }
+
+    let em = document.getElementById('onemoreshot-button');
+    em.style.display= "inline";
+    let el = document.getElementById('answer-input');
+    el.style.display= "none";
+    document.getElementById("caution-area").innerText = "";
+}
+
+function show_record() {
+    const textArea = document.getElementById("record");
+    textArea.innerHTML = "";
+    let p = document.createElement("p");
+    p.innerHTML = "<u>一二三四五六七八九十他</u>";
+    textArea.appendChild(p);
+    let texts = [[],[],[],[],[],[],[],[],[],[],[]];
+    let texts_length = [];
+    let d   = ls_record.slice();
+    for (i=0; i < 11; i++) {
+        while ( d[i] >= 5  ) { texts[i].push(5); d[i] -= 5; };
+        texts[i].push(d[i]);
+        texts_length.push(texts[i].length);
+    };
+    
+    let p2 = document.createElement("p");
+    for (j=0; j<Math.max(...texts_length); j++) {
+        let a = 0; let text = "";
+        for (i=0; i<11; i++) {
+            p2.appendChild((texts[i].length >=j+1 ? add_five(texts[i][j]) : add_five(0)));
+        }
+        p2.appendChild (document.createElement("br"));
+    };
+    textArea.appendChild(p2);
+}
+
+function add_five(n) {
+  let svg = document.createElement("img");
+  svg.setAttribute("class", "five");
+  svg.setAttribute("src"  , "./svgs/"+n.toString()+".svg");
+  return svg;
 }
 
 function makeGojuon() {
@@ -226,7 +318,7 @@ function modify(id) {
     }
 }
 
-
+// 解答のinputから1行分のHTML<div>を返す
 function makeAnswerDisplayNodes(input, input_seion) {
     var p = document.createElement("p");
     var inputs_seion = input_seion.split("");
@@ -234,7 +326,6 @@ function makeAnswerDisplayNodes(input, input_seion) {
     correctLetter = 0; 
 
     for(var i = 0; i < inputs.length; i ++) {
-        submittedCharacters.push(seionka(inputs[i]));
         var div = document.createElement("span");
         if (isHit(inputs_seion[i], i)) {
             correctCharacters.push(seionka(inputs_seion[i]))
@@ -286,7 +377,7 @@ function isGraze(character) {
 }
 
 function make_game_log() {
-    game_log = "ワードスナイプ / 日本語Wordle / inertia-yehu.github.io/wordsnipe\r\n No. " + todayString + "\r\n";
+    game_log = "ワードスナイプ・日本語 Wordle inertia-yehu.github.io/wordsnipe\r\n No. " + todayString + "\r\n";
     for(var i = 0; i < submittedCharacters.length; i ++){
         if ((i - 1) % 4 == 3) {
             game_log += "\r\n";
@@ -321,7 +412,7 @@ function restart() {
   seed = ((seed *16807) % 2147483647) % answers.length; // 更新
   initialize(seed);
   let box = document.getElementById('answer-input')
-  box.style.display= "inline";
+  box.style.display= "flex";
   game_number ++;
   return
 }

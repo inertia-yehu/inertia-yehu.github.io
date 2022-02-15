@@ -41,7 +41,7 @@ input, button, span {
 }
 
 #wrapper {
-    max-width:600px;
+    max-width:500px;
     margin:auto;
 }
 
@@ -102,10 +102,10 @@ input, button, span {
 }
 
 #wrapper-explain {
-  display:flex;
+  display: none;
   position: absolute;
   width: 100%;
-  max-width: 500px;
+  max-width: 400px;
   top: 100px;
   left: 50%;
   background-color: var(--white);
@@ -209,20 +209,36 @@ input, button, span {
     border: var(--gray) 0.5px solid;
     height: 36px;
     margin-left: 4px;
+    margin-right: 4px;
     margin-bottom: 1em;
+    padding: 0.5em;
 }
 #onemoreshot-button {
     background-color: var(--white);
     color: var(--gray);
 }
 
-#close_bottom, #rule-button {
+/*#close_bottom, #rule-button, #record-button {*/
+
+button {
     margin-top: 2em;
     background-color: var(--white);
     height:26px;
     border: var(--lightGray) 1px solid;
     border-radius:3px;
 }
+button:active {
+    background-color: var(--lightGray);
+}
+
+#record {
+  margin: 1em;
+
+}
+#record>p {
+  margin:0;
+}
+
 #answer-input {
     color: var(--gray);
     width: 100%;
@@ -245,10 +261,11 @@ input, button, span {
     margin-left: 4px;
     font-size: 24px;
 }
-#answer-input-button {
+button#answer-input-button {
     border: var(--lightGray) 1px solid;
-    height: 30px;
+    height: 36px !important;
     margin-left: 8px;
+    margin-top: 0px;
 }
 .red {
     background-color: var(--yellow) !important;
@@ -270,4 +287,10 @@ input, button, span {
 }
 .not-used {
     background-color: #fff !important;
+}
+
+
+img.five {
+    width : 1em;
+    height : 1em;
 }
