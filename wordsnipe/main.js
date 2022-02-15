@@ -415,7 +415,7 @@ function enterSubmit(){
 
 
 function restart() {
-  seed = ((seed *16807) % 2147483647) % answers.length; // 更新
+  seed = (seed + 100) % answers.length; // 更新
   initialize(seed);
   let box = document.getElementById('answer-input')
   box.style.display= "flex";
