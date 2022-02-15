@@ -219,6 +219,12 @@ function show_record() {
     textArea.appendChild(p2);
 }
 
+function erase_records() {
+    localStorage.removeItem['record'];
+    ls_record = [0,0,0,0,0,0,0,0,0,0,0];
+    show_record();
+}
+
 function add_five(n) {
   let svg = document.createElement("img");
   svg.setAttribute("class", "five");
