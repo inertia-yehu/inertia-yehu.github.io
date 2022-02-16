@@ -236,7 +236,8 @@ button:active {
 
 }
 #record>p {
-  margin:0;
+  margin:0 0 0.25em 0;
+  letter-spacing: 0.2em;
 }
 
 #answer-input {
@@ -293,4 +294,6 @@ button#answer-input-button {
 img.five {
     width : 1em;
     height : 1em;
+    margin-left: 0.05em;
+    margin-right: 0.15em;
 }

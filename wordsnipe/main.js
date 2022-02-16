@@ -1,5 +1,5 @@
 var correctAnswer = "";
-var correctAnswer_seion = "";
+var correctAnswer_seion = [];
 var correctAnswer_index = [];
 var newestAnswer = "     ";
 var newestAnswer_seion = "     ";
@@ -34,7 +34,8 @@ if (ls_gameid == todayString) {
     if ( ls_char ) { submittedCharacters = ls_char };
     if ( ls_dakuon ) { submittedDakuon = ls_dakuon };
 } else {
-    ls_dakuon = []; ls_gameid = []; writedownCookie();
+    ls_dakuon = []; ls_gameid = []; submittedCharacters = ""; submittedDakuon = [];
+    writedownCookie(); 
 };
 
 function writedownCookie() {
@@ -43,12 +44,14 @@ function writedownCookie() {
     localStorage["gameid"] = todayString;
 }
 
+let i_log = 0;
+
 initialize(seed); // 初回の初期化
 
 function initialize(seed) {
     correctAnswer = answers[seed];
     correctAnswer_kaki = answer_kaki[seed];
-    correctAnswer_seion = seionka(correctAnswer);
+    correctAnswer_seion = seionka(correctAnswer).split("");
     for (let i=0; i<4; i++) {
       correctAnswer_index[i] = gojuon_seion.indexOf(correctAnswer_seion[i])
     }
@@ -58,23 +61,27 @@ function initialize(seed) {
     endgame = false;
     let el = document.getElementById('onemoreshot-button')
     el.style.display= "none";
+    attempt = 0;
+    correctCharacters = [];
 
     if ( game_number == 0 ) {
         const textArea = document.getElementById("slot");
-        for ( let i=0; i<submittedDakuon.length; i++) {
-            textArea.appendChild(makeAnswerDisplayNodes(submittedDakuon[i], submittedCharacters.substr(i*4,4)));
+        while ( i_log < submittedDakuon.length) {
+            attempt ++;
+            textArea.appendChild(makeAnswerDisplayNodes(submittedDakuon[i_log], submittedCharacters.substr(i_log*4,4)));
+            if ( correctAnswer == submittedDakuon[i_log]) {
+                i_log ++;
+                finalize( false, attempt == i_log );
+                restart();
+            }
+            i_log ++;
         };
-        if ( correctAnswer == submittedDakuon.slice(-1)[0]) {
-            finalize( false );
-        }
     } else {
-        submittedCharacters = "";
-        correctCharacters = [];
+        //submittedCharacters = "";
         grazeCharacters = [];
     }
 
     game_number ++;
-    attempt = 0;
     correctLetter = 0;
 
     makeGojuon();
@@ -120,9 +127,9 @@ function submit() {
             submittedCharacters += newestAnswer_seion;
             submittedDakuon.push(newestAnswer);
             renderAnswer(newestAnswer, newestAnswer_seion);
-            if (game_number == 1) {
+            //if (game_number == 1) {
               writedownCookie();
-            }
+            //}
         } else {
             document.getElementById("caution-area").innerText = input+"は辞書にありません";
         }
@@ -146,11 +153,19 @@ function renderAnswer(input, input_seion) {
 
     if(correctLetter == 4) { //正解してたら
         //finalize(game_number==1); 
-        finalize(true); 
+        finalize(true, game_number==1); 
     }
 }
 
-function finalize( add_cookie ) {
+function finalize( add_cookie, add_share ) {
+
+    const textArea = document.getElementById("slot");
+    var p = document.createElement("p");
+    p.classList.add("correct");
+    p.innerText = correctAnswer_kaki+"（"+correctAnswer+"）";
+    textArea.appendChild(p);
+    endgame = true;
+
     if ( add_cookie ) {
         if (attempt <= 10) { // cookieのrecordを更新
             ls_record[attempt-1] ++;
@@ -160,16 +175,10 @@ function finalize( add_cookie ) {
         localStorage['record'] = JSON.stringify(ls_record);
     };
 
-    const textArea = document.getElementById("slot");
-    var p = document.createElement("p");
-    p.classList.add("correct");
-    p.innerText = correctAnswer_kaki+"（"+correctAnswer+"）";
-    textArea.appendChild(p);
     show_record();
-    endgame = true;
 
-    if ( 0 <=game_number && game_number <= 1 ) { // 0-> initialize; 1-> firstgame
-        make_game_log();
+    if ( add_share ) { // 0-> initialize; 1-> firstgame
+        make_game_log(attempt);
         let div_btn = document.createElement("div");
         div_btn.setAttribute("id", "share");
         let button = document.createElement("button");
@@ -178,12 +187,6 @@ function finalize( add_cookie ) {
         button.setAttribute("onclick", "share()");
         div_btn.appendChild(button);
         textArea.appendChild(div_btn);
-//        let button2 = document.createElement("button");
-//        button2.innerText = "記録";
-//        button2.setAttribute("id", "record-button");
-//        button2.setAttribute("onclick", "show_record()");
-//        div_btn.appendChild(button2);
-
     }
 
     let em = document.getElementById('onemoreshot-button');
@@ -244,10 +247,10 @@ function makeGojuon() {
         let moji = gojuons[id];
         div.setAttribute("onclick", "dictate("+id.toString()+")");
 
-        if(submittedCharacters.includes(moji)) {
+        if(submittedCharacters.substr(-attempt*4,4*attempt).includes(moji)) {
             if(correctCharacters.includes(moji)) {
                 div.classList.add("green")
-            } else if (correctAnswer_seion.split("").includes(moji)) {
+            } else if (correctAnswer_seion.includes(moji)) {
                 div.classList.add("yellow");
             } else if (graze_index.includes(id)) {
                 div.classList.add("red");
@@ -351,11 +354,11 @@ function makeAnswerDisplayNodes(input, input_seion) {
 }
 
 function isHit(character, i) {
-    return correctAnswer_seion.split("")[i] == character
+    return correctAnswer_seion[i] == character
 }
 
 function isBlow(character) {
-    return correctAnswer_seion.split("").includes(character);
+    return correctAnswer_seion.includes(character);
 }
 
 function isGraze(character) {
@@ -382,17 +385,18 @@ function isGraze(character) {
     return ans
 }
 
-function make_game_log() {
-    game_log = "ワードスナイプ・日本語 Wordle inertia-yehu.github.io/wordsnipe\r\n No. " + todayString + "\r\n";
-    for(var i = 0; i < submittedCharacters.length; i ++){
+function make_game_log(attempt) {
+    game_log = "ワードスナイプ / 日本語Wordle inertia-yehu.github.io/wordsnipe\r\n No. " + todayString + "\r\n";
+    let log_char = submittedCharacters.substr(0,attempt*4);
+    for(var i = 0; i < log_char.length; i ++){
         if ((i - 1) % 4 == 3) {
             game_log += "\r\n";
         }
-        if (isHit(submittedCharacters[i], i%4)) {
+        if (isHit(log_char[i], i%4)) {
             game_log += "🟩";
-        } else if (isBlow(submittedCharacters[i])) {
+        } else if (isBlow(log_char[i])) {
             game_log += "🟧";
-        } else if (isGraze(submittedCharacters[i])) {
+        } else if (isGraze(log_char[i])) {
             game_log += "🟨";
         } else {
             game_log += "⬜";
