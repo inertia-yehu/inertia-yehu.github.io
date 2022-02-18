@@ -274,10 +274,19 @@ button#answer-input-button {
 .green {
     background-color: var(--green) !important;
     color: #fff !important;
+    /*background: center/ contain no-repeat url('./svgs/c_green.svg');
+    margin : -0.15em !important;
+    padding : 0.15em;
+    color : #000 !important;
+     * */
 }
 .yellow {
     background-color: var(--red) !important;
     color: #fff !important;
+    /*background: center/ contain no-repeat url('./svgs/circle.svg');
+    color : #000 !important;
+    margin : -0.15em !important;
+    padding : 0.15em;*/
 }
 .gray {
     background-color: #aaa !important;

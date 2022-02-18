@@ -46,6 +46,9 @@ function writedownCookie() {
 
 let i_log = 0;
 
+if (localStorage["record"] ) { show_record(); }
+
+
 initialize(seed); // 初回の初期化
 
 function initialize(seed) {
@@ -116,6 +119,9 @@ function getGraze(index) {
 function submit() {
     if (document.getElementById("text-box").value.length != 4) {
         document.getElementById("caution-area").innerText = "ひらがな4文字で入力してください";
+        if ( document.getElementById("text-box").value == "showLog" ) {
+            document.getElementById("caution-area").innerHTML = localStorage["dakuon"] + "<br>" + localStorage["char"] + "<br>" + game_number + ":" + seed+ ":"+ attempt 
+        }
     } else {
         document.getElementById("caution-area").innerText = "";
         var input = document.getElementById("text-box").value;
@@ -225,6 +231,7 @@ function show_record() {
 function erase_records() {
     localStorage.removeItem['record'];
     ls_record = [0,0,0,0,0,0,0,0,0,0,0];
+    localStorage['record'] = JSON.stringify(ls_record);
     show_record();
 }
 
