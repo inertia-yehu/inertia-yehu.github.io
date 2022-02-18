@@ -72,7 +72,7 @@ function initialize(seed) {
         while ( i_log < submittedDakuon.length) {
             attempt ++;
             textArea.appendChild(makeAnswerDisplayNodes(submittedDakuon[i_log], submittedCharacters.substr(i_log*4,4)));
-            if ( correctAnswer == submittedDakuon[i_log]) {
+            if ( seionka(correctAnswer) == submittedCharacters.substr(i_log*4,4)) {
                 i_log ++;
                 finalize( false, attempt == i_log );
                 restart();
@@ -84,7 +84,6 @@ function initialize(seed) {
         grazeCharacters = [];
     }
 
-    game_number ++;
     correctLetter = 0;
 
     makeGojuon();
@@ -119,7 +118,7 @@ function getGraze(index) {
 function submit() {
     if (document.getElementById("text-box").value.length != 4) {
         document.getElementById("caution-area").innerText = "ひらがな4文字で入力してください";
-        if ( document.getElementById("text-box").value == "showLog" ) {
+        if ( document.getElementById("text-box").value == "showlog" ) {
             document.getElementById("caution-area").innerHTML = localStorage["dakuon"] + "<br>" + localStorage["char"] + "<br>" + game_number + ":" + seed+ ":"+ attempt 
         }
     } else {
@@ -158,8 +157,7 @@ function renderAnswer(input, input_seion) {
     makeGojuon();
 
     if(correctLetter == 4) { //正解してたら
-        //finalize(game_number==1); 
-        finalize(true, game_number==1); 
+        finalize(true, game_number==0); 
     }
 }
 
