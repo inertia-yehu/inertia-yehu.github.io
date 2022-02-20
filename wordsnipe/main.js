@@ -66,16 +66,19 @@ function initialize(seed) {
     el.style.display= "none";
     attempt = 0;
     correctCharacters = [];
+    //console.log(game_number);
 
     if ( game_number == 0 ) {
         const textArea = document.getElementById("slot");
         while ( i_log < submittedDakuon.length) {
             attempt ++;
+            //console.log(submittedDakuon[i_log], submittedCharacters.substr(i_log*4,4));
             textArea.appendChild(makeAnswerDisplayNodes(submittedDakuon[i_log], submittedCharacters.substr(i_log*4,4)));
             if ( seionka(correctAnswer) == submittedCharacters.substr(i_log*4,4)) {
                 i_log ++;
                 finalize( false, attempt == i_log );
                 restart();
+                i_log --;
             }
             i_log ++;
         };
@@ -91,7 +94,7 @@ function initialize(seed) {
 
 function seionka(input) {
     let output = input;
-    for (let i=0; i < 30; i++) {
+    for (let i=0; i < 35; i++) {
       output = output.split(letter_dakuon[i]).join(letter_seion[i]);
     }
     return output
@@ -425,10 +428,10 @@ function enterSubmit(){
 
 function restart() {
   seed = (seed + 100) % answers.length; // 更新
+  game_number ++;
   initialize(seed);
   let box = document.getElementById('answer-input')
   box.style.display= "flex";
-  game_number ++;
   return
 }
 
