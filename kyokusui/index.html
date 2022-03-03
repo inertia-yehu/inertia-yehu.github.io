@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link href="https://fonts.googleapis.com/earlyaccess/hannari.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div id="wrapper">
+        <div class="centered" id="title">
+            <div class="centered" id="start" onclick="start()"> START </div>
+        </div>
+        <div class="centered" id="main_window">
+
+        </div>
+        <div id="left" class="frame"> </div>
+        <div id="right" class="frame"> </div>
+        <div id="top" class="frame"> </div>
+        <div id="bottom" class="frame"> </div>
+        <div class="centered" id="haiku"></div>
+        <div class="centered" id="bar"></div>
+        <div class="centered" id="ending">
+            <p>タップで文字を変更できます。</p>
+            <div id="ouvre"></div>
+            <div style="display:flex; flex-wrap: wrap">
+            <span><button id="submit" onclick="submit()"> SNSに投稿 </button></span>
+            <span id="share"></span>
+            </div>
+        </div>
+    </div>
+    <!--<script src="main.js"> </script> -->
+    <script src="simple.js"> </script>
+</body>
+</html>

@@ -415,8 +415,8 @@ function share() {
     navigator.clipboard.writeText(game_log);
     let comment = document.getElementById("share")
     let p = document.createElement("p");
-    p.setAttribute("id", "copy-record-description")
-    p.innerText = "クリップボードにコピーしました"
+    p.setAttribute("id", "copy-record-description");
+    p.innerText = "クリップボードにコピーしました";
     comment.appendChild(p);
 }
 function enterSubmit(){
