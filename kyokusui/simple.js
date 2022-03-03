@@ -226,7 +226,7 @@ function refresh () {
 
 function finalize() {
     const ending = document.getElementById("ending");
-    ending.style.display = "flex";
+    ending.style.display = "block";
     const ouvre = document.getElementById("ouvre");
     for ( let i=0; i<haiku.length; i++ ) {
         const span = document.createElement("span");

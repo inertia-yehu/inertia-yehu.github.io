@@ -36,7 +36,6 @@ div {
     padding-top:20px;
 }
 
-#share { font-size: 15px}
 
 span {
     width: 40px;
@@ -44,18 +43,26 @@ span {
     font-size: 40px;
 }
 
+#title>p {
+    font-family: sans-serif;
+    margin: 30px;
+    margin-top:3em;
+
+}
 div#start {
-    position: relative;
+    position: absolute;
     font-size: 30px;
     z-index:90;
     text-align:center;
 }
 
 #submit {
-    margin-top: 60px;
+    margin-top: 40px;
     font-size: 16px;
     background-color: white;
+    height: 6em;
 }
+#share { font-size: 15px; height: 25em;}
 
 .centered {
     left: 50%;
