@@ -262,7 +262,7 @@ function change(i) {
 }
 
 function submit() {
-    let game_log = "60秒で「"+haiku.join('')+ "」を詠みました。 https://yehu-inertia.github.io/kyokusui #kyokusui";
+    let game_log = "60秒で「"+haiku.join('')+ "」を詠みました。 https://inertia-yehu.github.io/kyokusui/ #kyokusui";
     navigator.clipboard.writeText(game_log);
     let comment = document.getElementById("share")
     let p = document.createElement("p");
