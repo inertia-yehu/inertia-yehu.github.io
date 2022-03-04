@@ -13,10 +13,10 @@ div {
 
 #title, #ending {
     position: absolute;
-    border: solid 2px black;
     width: var(--frame-width);
     height: var(--frame-height);
-    transform: translateX(-150px) translateY(-50%);
+    width: 100%;
+    height: 100%;
     z-index: 90;
     background-color: rgba(255,255,255,0.9);
 }
@@ -26,18 +26,22 @@ div {
     writing-mode: vertical-rl;
     -webkit-writing-mode: vertical-rl;
     -ms-writing-mode: tb-rl;
+    flex-direction: column;
 }
-#ending>* {
-    margin:20px;
+
+#ending>p:first-child {
+    margin-right: 0.5em;
+    margin-top: 0.5em;
+    z-index:95;
 }
 
 #ouvre { 
-    padding-right:20px;
-    padding-top:20px;
+    position: absolute;
+    height: 300px;
 }
 
 
-span {
+#ouvre>span {
     width: 40px;
     height: 40px;
     font-size: 40px;
@@ -47,7 +51,6 @@ span {
     font-family: sans-serif;
     margin: 30px;
     margin-top:3em;
-
 }
 div#start {
     position: absolute;
@@ -56,13 +59,27 @@ div#start {
     text-align:center;
 }
 
-#submit {
-    margin-top: 40px;
-    font-size: 16px;
-    background-color: white;
-    height: 6em;
+div#has_button {
+    position:absolute;
+    flex-direction:row;
+    width: 100%;
+    padding-top: 40px;
+    font-size: 12px;
+    writing-mode: horizontal-tb;
+    bottom: 1em;
+    text-align:center;
 }
-#share { font-size: 15px; height: 25em;}
+
+#submit {
+    background-color: white;
+}
+
+#share { 
+    height: 1.1em;
+}
+#copy-record-description {
+    margin:0
+}
 
 .centered {
     left: 50%;
@@ -71,12 +88,16 @@ div#start {
 }
 
 #main_window {
-    border: solid 2px black;
+    /*border: solid 2px black;*/
     width: var(--frame-width);
     height: var(--frame-height);
     position: absolute;
     transform: translateX(-150px) translateY(-50%);
     background-color: rgba(255,255,255,0.9);
+}
+#main_frame {
+    height:100%
+    width:100%
 }
 
 #wrapper {
@@ -92,9 +113,9 @@ div#start {
 div.letter {
     position: absolute;
     /*display: flex;*/
-    font-size: 55px;
-    width: 55px;
-    height: 55px;
+    font-size: 60px;
+    width: 60px;
+    height: 60px;
     line-height: 0.8em;
     justify-content: center;
     overflow: hidden;
@@ -104,8 +125,8 @@ div.letter {
     /*transform: translateX(-50%) translateY(-50%);*/
     z-index: 40;
     cursor: default;
-    background-color: rgba(255,255,255,0.4);
-    border-radius: 25px;
+    background-color: rgba(255,255,255,0.5);
+    border-radius: 5px;
     /*filter: blur(4px);*/
 }
 
@@ -138,26 +159,32 @@ div.frame {
 }
 
 div#right {
-    height: 600px;
-    transform: translateX( 134px) translateY(-50%);
-    background: linear-gradient(to right, rgba(255,255,255,0.95), white 10px);
+    height: 554px;
+    transform: translateX( 129px) translateY(-50%);
+    background: linear-gradient(to right, rgba(255,255,255,0.95), white 20px);
+    border-left: solid 2px black;
+    z-index: 72;
 }
 div#left {
-    height: 600px;
-    transform: translateX(-710px) translateY(-50%);
-    background: linear-gradient(to left, rgba(255,255,255,0.95), white 10px);
+    height: 554px;
+    transform: translateX(-712px) translateY(-50%);
+    background: linear-gradient(to left, rgba(255,255,255,0.95), white 20px);
+    border-right: solid 2px black;
+    z-index: 72;
 }
 div#bottom {
-    transform: translateX(-50%) translateY( 277px);
-    background: linear-gradient(to bottom, rgba(255,255,255,0.95), white 10px);
-    width: 9500px;
+    transform: translateX(-50%) translateY( 275px);
+    background: linear-gradient(to bottom, rgba(255,255,255,0.95), white 20px);
+    width: 900px;
     height: 300px;
+    border-top: solid 2px black;
 }
 div#top {
     height: 300px;
-    background: linear-gradient(to top, rgba(255,255,255,0.95), white 10px);
+    background: linear-gradient(to top, rgba(255,255,255,0.95), white 20px);
     transform: translateX(-50%) translateY(-577px);
     width: 900px;
+    border-bottom: solid 2px black;
 }
 
 div#haiku {

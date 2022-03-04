@@ -7,8 +7,8 @@ const n_letters = letters.length
 
 const windowX = 280;
 const windowY = 550;
-const outframeX = 150;
-const outframeY = 150;
+const outframeX = 200;
+const outframeY = 200;
 
 let mojis = [];
 let main_window = document.getElementById("main_window");
@@ -17,7 +17,9 @@ let potential = [];
 let grid = [];
 let typhoons = [];
 
-let endtime = 60*17*3;
+let n_typhoons = 0;
+
+let endtime = 60*17*4;
 
 let haiku = [];
 
@@ -39,27 +41,17 @@ const offset_y = outframeY/dy;
 
 
 
-
-function make_potential() {
-    for (let i = 0; i < n_f_x; i++ ) {
-        for (let j = 0; j < n_f_y; j++) {
-            potential[i][j] = 0;
-            potential[i][j] += typhoons[0].power / Math.max(3,((i*dx-typhoons[0].x)**2+(j*dy-typhoons[0].y)**2)**0.25);
-            potential[i][j] += typhoons[1].power / Math.max(3,((i*dx-typhoons[1].x)**2+(j*dy-typhoons[1].y)**2)**0.25);
-        }
-    }
-}
-
-
-
 class typhoon {
-    constructor(id, power, x, y) {
+    constructor(id, power, x, y, t_vx, t_vy, lifetime) {
         this.id = id;
+        this.power0 = power;
         this.power = power;
+        this.lifetime = lifetime;
+        this.lt = 0;
         this.x = x;
         this.y = y;
-        this.vx = -0.7;
-        this.vy = 0.7;
+        this.vx = t_vx;
+        this.vy = t_vy;
         this.div = document.createElement("div");
         this.div.innerText = this.id; 
         this.div.style.left = (this.x-outframeX).toString()+"px";
@@ -74,6 +66,11 @@ class typhoon {
         if ( this.y> flen_y ) { this.y -= flen_y };
         this.div.style.top  = (this.y-outframeY).toString()+"px";
         this.div.style.left = (this.x-outframeX).toString()+"px";
+        this.lt ++;
+        this.power = this.power0*Math.sin(Math.PI*this.lt/this.lifetime)**2;
+    }
+    vissitude () {
+
     }
 }
 
@@ -108,7 +105,7 @@ class c_moji {
     vector() {
         this.vx = this.vx0+0.; this.vy = this.vy0+0.;
         for ( let j=0 ; j<9; j++ ) {
-            for ( let i=0 ; i<2; i++ ) {
+            for ( let i=0 ; i<n_typhoons; i++ ) {
                 let dx1 = (this.x-typhoons[i].x-hosei_x[j]*flen_x)//+flen_x)%flen_x;
                 let dy1 = (this.y-typhoons[i].y-hosei_y[j]*flen_y)//+flen_y)%flen_y;
                 //let r2 = Math.max(5,(dx1**2+dy1**2));
@@ -161,8 +158,9 @@ function initialize() {
             grid[i].push([fd_l+dx*i, fd_l+dy*j]);
         }
     }
-    typhoons.push(new typhoon(0, -100, 700, 100));
-    typhoons.push(new typhoon(1, 20,  100, 550));
+    typhoons.push(new typhoon(0, 250, 800, 100, 0.3, 1., 1000));
+    typhoons.push(new typhoon(1, -100,  100, 550, 0.2, 1., 500));
+    n_typhoons = 2;
     //typhoons.push(new typhoon(1, 85, -100, 1000));
     //typhoons.push(new typhoon(2, 65, 930, 500));
     //make_potential();
@@ -226,7 +224,7 @@ function refresh () {
 
 function finalize() {
     const ending = document.getElementById("ending");
-    ending.style.display = "block";
+    ending.style.display = "flex";
     const ouvre = document.getElementById("ouvre");
     for ( let i=0; i<haiku.length; i++ ) {
         const span = document.createElement("span");

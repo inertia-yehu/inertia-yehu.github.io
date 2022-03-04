@@ -6,14 +6,21 @@
 </head>
 <body>
     <div id="wrapper">
-        <div class="centered" id="title">
-          <p>
-          流れる文字を選び、時間内に俳句を作ってください。<br>
-          濁点や促音などは後に修正できます。</p>
-          <div class="centered" id="start" onclick="start()">&gt; START &lt;</div>
-        </div>
         <div class="centered" id="main_window">
-
+            <div class="centered" id="title">
+                <p>
+                流れる文字を選び、時間内に俳句を作ってください。<br>
+                濁点や促音などは後に修正できます。</p>
+                <div class="centered" id="start" onclick="start()">&gt; START &lt;</div>
+            </div>
+            <div class="centered" id="ending">
+                <p>タップで文字を変更できます。</p>
+                <div class="centered" id="ouvre"></div>
+                <div id="has_button">
+                  <button id="submit" onclick="submit()">SNSに投稿</button>
+                  <div id="share"></div>
+                </div>
+            </div>
         </div>
         <div id="left" class="frame"> </div>
         <div id="right" class="frame"> </div>
@@ -21,14 +28,6 @@
         <div id="bottom" class="frame"> </div>
         <div class="centered" id="haiku"></div>
         <div class="centered" id="bar"></div>
-        <div class="centered" id="ending">
-            <p>タップで文字を変更できます。</p>
-            <div id="ouvre"></div>
-                <span><button id="submit" onclick="submit()"> SNSに投稿 </button></span>
-                <span id="share"></span>
-            <div style="display:flex; flex-wrap: wrap">
-            </div>
-        </div>
     </div>
     <!--<script src="main.js"> </script> -->
     <script src="simple.js"> </script>
