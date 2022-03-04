@@ -20,7 +20,7 @@ let typhoons = [];
 
 let n_typhoons = 0;
 
-let endtime = 60*17*4;
+let endtime = 60*60;
 
 let haiku = [];
 
@@ -160,7 +160,7 @@ class c_moji {
 const add_mojis = (y0) => {
     mojis.push(new c_moji(count_mojis, count_mojis%n_letters, y0));
     mojis_id.push(count_mojis);
-    count_mojis += 1+Math.floor(Math.random()**4*10);
+    count_mojis += 1+Math.floor(Math.random()**4*100);
 }
 
 initialize();
@@ -262,7 +262,7 @@ function change(i) {
 }
 
 function submit() {
-    let game_log = haiku.join('')+ "\r\n\r\nを拾いました。 #magarimiz #samidare";
+    let game_log = "60秒で「"+haiku.join('')+ "」を詠みました。 https://yehu-inertia.github.io/kyokusui #kyokusui";
     navigator.clipboard.writeText(game_log);
     let comment = document.getElementById("share")
     let p = document.createElement("p");
