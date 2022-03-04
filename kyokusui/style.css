@@ -55,6 +55,7 @@ div#start {
     font-size: 30px;
     z-index:90;
     text-align:center;
+    width: 200px;
 }
 
 div#has_button {

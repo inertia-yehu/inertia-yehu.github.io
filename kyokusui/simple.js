@@ -7,14 +7,15 @@ const n_letters = letters.length
 
 const windowX = 280;
 const windowY = 550;
-const outframeX = 200;
+const outframeX = 100;
 const outframeY = 200;
 
 let mojis = [];
+let mojis_id = [];
 let main_window = document.getElementById("main_window");
 
-let potential = [];
-let grid = [];
+let count_mojis = 0;
+
 let typhoons = [];
 
 let n_typhoons = 0;
@@ -64,6 +65,7 @@ class typhoon {
         this.y += this.vy;
         if ( this.x> flen_x ) { this.x -= flen_x };
         if ( this.y> flen_y ) { this.y -= flen_y };
+        if ( this.x< 0 ) { this.x += flen_x};
         this.div.style.top  = (this.y-outframeY).toString()+"px";
         this.div.style.left = (this.x-outframeX).toString()+"px";
         this.lt ++;
@@ -78,16 +80,18 @@ const hosei_x = [0, -1,  0, 1, 0, -1,  1,  1,  1];
 const hosei_y = [0,  0, -1, 0, 1, -1, -1, -1,  1];
 
 class c_moji {
-    constructor(id) {
+    constructor(id, cid, y0) {
         this.id = id;
-        this.l = letters[id];
+        this.cid = cid;
+        this.l = letters[cid];
         this.go = Math.floor(2*Math.random())*2-1;
         this.x =  flen_x * Math.random();//* ( 0.5 + id% 7 ) /  7;
         this.y =  flen_y * Math.random();//* ( 0.5 + Math.floor(id/7) ) / 7;
+        if (y0 == true ) {this.y = 50;}
         this.vx = 0.;
         this.vy = 0.;
         this.vx0 = Math.random()*0.1;
-        this.vy0 = 1.+Math.random()*0.25;
+        this.vy0 = 1.5+Math.random()*0.5;
         this.size = 95- (this.vx0**2 + this.vy0**2)**0.5*300;
 
         this.div = document.createElement("div");
@@ -95,10 +99,12 @@ class c_moji {
         this.div.classList.add("letter");
         this.div.style.left = (this.x-outframeX).toString()+"px";
         this.div.style.top  = (this.y-outframeY).toString()+"px";
-        this.div.setAttribute("onclick", "yomu("+id.toString()+")");
+        this.div.setAttribute("onclick", "yomu("+cid.toString()+")");
         main_window.appendChild(this.div);
+        this.div.style.zIndex = 40+Math.floor(Math.random()*8);
         this.div.setAttribute("style", "font-size:" + this.size.toString()+"px");
         this.ouch = true;
+        console.log(mojis_id.findIndex(dum => dum == this.id), this.id);
 
     }
 
@@ -118,12 +124,20 @@ class c_moji {
     }
 
     move() {
-        //if (this.wait()) {
-            this.x += this.vx;
-            this.y += this.vy;
-            this.div.style.top  = (this.y-outframeY).toString()+"px";
-            this.div.style.left = (this.x-outframeX).toString()+"px";
-        //}
+        for ( let i=0 ; i<mojis.length; i++ ) {
+            let dx1 = (this.x-mojis[i].x);
+            let dy1 = (this.y-mojis[i].y);
+            let r2 = (dx1**2+dy1**2)+5;
+            if (mojis[i].id==this.id ) { continue }
+            else if (r2<10000) {
+                this.x += 100* (dx1) / r2**1.5;
+                this.y += 100* (dy1) / r2**1.5;
+            }
+        }
+        this.x += this.vx;
+        this.y += this.vy;
+        this.div.style.top  = (this.y-outframeY).toString()+"px";
+        this.div.style.left = (this.x-outframeX).toString()+"px";
         if ( this.x > flen_x ){
             this.x -= flen_x;
             this.y += (Math.random()-0.5)*40;
@@ -132,32 +146,30 @@ class c_moji {
             this.y += (Math.random()-0.5)*40;
         }
         if ( this.y > flen_y ){
-            this.y -= flen_y;
-            this.x = flen_x * Math.random();
-            this.div.style.zIndex = 40+Math.floor(Math.random()*8);
-        } else if ( this.y < 0 ) {
-            this.y += flen_y;
-        }
+            console.log(this.id, this.y, flen_y, this.vy, letters[this.cid]);
+            let killid = mojis_id.findIndex(dum => dum == this.id);
+            mojis.splice(killid,1);
+            mojis_id.splice(killid,1);
+            this.div.remove();
+            add_mojis(true);
+        } 
     } 
 
 }
 
+const add_mojis = (y0) => {
+    mojis.push(new c_moji(count_mojis, count_mojis%n_letters, y0));
+    mojis_id.push(count_mojis);
+    count_mojis += 1+Math.floor(Math.random()**4*10);
+}
 
 initialize();
 
+
+
 function initialize() {
-    for (let i=0; i<n_letters; i++) {
-        mojis.push(new c_moji(i));
-    }
-    for (let i = 0; i <= n_f_x; i++ ) {
-        potential.push([]);
-        grid.push([]);
-        for (let j = 0; j <= n_f_y; j++) {
-            potential[i].push(0.0);
-        }
-        for (let j = 0; j <= n_f_y; j++) {
-            grid[i].push([fd_l+dx*i, fd_l+dy*j]);
-        }
+    for (let i=0; i<35; i++) {
+        add_mojis(false);
     }
     typhoons.push(new typhoon(0, 150, 800, 100, 0.3, 1., 1000));
     typhoons.push(new typhoon(1, -50,  100, 550, 0.2, 1., 500));
@@ -185,7 +197,7 @@ function start() {
 
 function wait () {
     if (timestep % 2 ==0) {
-      for (let i=0; i<n_letters; i++) {
+      for (let i=0; i<mojis.length; i++) {
           mojis[i].vector();
           mojis[i].move();
       }
@@ -201,7 +213,7 @@ function wait () {
 }
 
 function refresh () {
-    for (let i=0; i<n_letters; i++) {
+    for (let i=0; i<mojis.length; i++) {
         mojis[i].vector();
         mojis[i].move();
     }
