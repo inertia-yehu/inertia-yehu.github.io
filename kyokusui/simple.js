@@ -86,8 +86,8 @@ class c_moji {
         this.y =  flen_y * Math.random();//* ( 0.5 + Math.floor(id/7) ) / 7;
         this.vx = 0.;
         this.vy = 0.;
-        this.vx0 = Math.random()*0.2;
-        this.vy0 = 1.25+Math.random()*0.25;
+        this.vx0 = Math.random()*0.1;
+        this.vy0 = 1.+Math.random()*0.25;
         this.size = 95- (this.vx0**2 + this.vy0**2)**0.5*300;
 
         this.div = document.createElement("div");
@@ -134,6 +134,7 @@ class c_moji {
         if ( this.y > flen_y ){
             this.y -= flen_y;
             this.x = flen_x * Math.random();
+            this.div.style.zIndex = 40+Math.floor(Math.random()*8);
         } else if ( this.y < 0 ) {
             this.y += flen_y;
         }
@@ -158,8 +159,8 @@ function initialize() {
             grid[i].push([fd_l+dx*i, fd_l+dy*j]);
         }
     }
-    typhoons.push(new typhoon(0, 250, 800, 100, 0.3, 1., 1000));
-    typhoons.push(new typhoon(1, -100,  100, 550, 0.2, 1., 500));
+    typhoons.push(new typhoon(0, 150, 800, 100, 0.3, 1., 1000));
+    typhoons.push(new typhoon(1, -50,  100, 550, 0.2, 1., 500));
     n_typhoons = 2;
     //typhoons.push(new typhoon(1, 85, -100, 1000));
     //typhoons.push(new typhoon(2, 65, 930, 500));
