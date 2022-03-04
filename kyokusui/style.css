@@ -17,6 +17,7 @@ div {
     height: 100%;
     z-index: 90;
     background-color: rgba(255,255,255,0.9);
+    writing-mode: vertical-rl;
 }
 
 #ending {
@@ -52,10 +53,12 @@ div {
 }
 div#start {
     position: absolute;
-    font-size: 30px;
+    font-size: 40px;
     z-index:90;
     text-align:center;
-    width: 200px;
+    left: 40%;
+    top: 0%;
+    margin-top:4em;
 }
 
 div#has_button {
