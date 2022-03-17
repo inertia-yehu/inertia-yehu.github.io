@@ -269,10 +269,8 @@ function makeGojuon() {
             }
         } else if (vanishedCharacters.includes(id)) {
             div.classList.add("vanished");
-            console.log(i, "v");
         } else {
             div.classList.add("not-used");
-            console.log(i, "p");
         }
         div.innerText = moji;
         gojuonField.appendChild(div);
@@ -360,8 +358,8 @@ function makeAnswerDisplayNodes(input, input_seion) {
             div.classList.add("red");
         } else {
             div.classList.add("gray");
-            vanishedCharacters = [...vanishedCharacters,...getGraze([gojuon_seion.indexOf(inputs[i])])];
-            console.log(i, getGraze([gojuon_seion.indexOf(inputs[i])]));
+            vanishedCharacters = [...vanishedCharacters,...getGraze([gojuon_seion.indexOf(inputs_seion[i])])];
+            console.log(i, inputs_seion[i], getGraze([gojuon_seion.indexOf(inputs_seion[i])]));
         }
         div.innerText = inputs[i];
         p.append(div);
