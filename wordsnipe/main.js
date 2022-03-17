@@ -10,6 +10,7 @@ var submittedCharacters = "";
 var submittedDakuon= [];
 var correctCharacters = [];
 var grazeCharacters = [];
+var vanishedCharacters = [];
 var graze_index = [];
 var game_number = 0;
 var game_log;
@@ -85,6 +86,7 @@ function initialize(seed) {
     } else {
         //submittedCharacters = "";
         grazeCharacters = [];
+        vanishedCharacters = [];
     }
 
     correctLetter = 0;
@@ -103,7 +105,7 @@ function seionka(input) {
 function getGraze(index) {
     let output = [];
     const no = [36,38,48]
-    for (i=0; i<4; i++) {
+    for (i=0; i<index.length; i++) {
         if (index[i]   >=5 ) {output.push(index[i]-5)}
         if (index[i]   <=45) {output.push(index[i]+5)}
         if (index[i]%5 != 0) {output.push(index[i]-1)}
@@ -237,10 +239,10 @@ function erase_records() {
 }
 
 function add_five(n) {
-  let svg = document.createElement("img");
-  svg.setAttribute("class", "five");
-  svg.setAttribute("src"  , "./svgs/"+n.toString()+".svg");
-  return svg;
+    let svg = document.createElement("img");
+    svg.setAttribute("class", "five");
+    svg.setAttribute("src"  , "./svgs/"+n.toString()+".svg");
+    return svg;
 }
 
 function makeGojuon() {
@@ -265,8 +267,12 @@ function makeGojuon() {
             } else {
                 div.classList.add("used");
             }
+        } else if (vanishedCharacters.includes(id)) {
+            div.classList.add("vanished");
+            console.log(i, "v");
         } else {
             div.classList.add("not-used");
+            console.log(i, "p");
         }
         div.innerText = moji;
         gojuonField.appendChild(div);
@@ -354,6 +360,8 @@ function makeAnswerDisplayNodes(input, input_seion) {
             div.classList.add("red");
         } else {
             div.classList.add("gray");
+            vanishedCharacters = [...vanishedCharacters,...getGraze([gojuon_seion.indexOf(inputs[i])])];
+            console.log(i, getGraze([gojuon_seion.indexOf(inputs[i])]));
         }
         div.innerText = inputs[i];
         p.append(div);
@@ -446,3 +454,23 @@ function showRule() {
   div.style.display="flex";
   return
 };
+
+var isCollapsed = false;
+const ack = document.getElementById('acknowledgement');
+
+function getBodyHeight() {
+    return ack.getBoundingClientRect().height;
+}
+
+function collapse() {
+    const height = isCollapsed ? getBodyHeight() : 0;
+    console.log("hello", height);
+    ack.style.height = `${height}px`;
+    isCollapsed = !isCollapsed;
+}
+function xxxcollapse() {
+    let range = document.createRange();
+    ref = document.getElementById('acknowledgement');
+    range.selectNode(ref);
+    range.collapse(true);
+}

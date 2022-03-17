@@ -310,6 +310,9 @@ button#answer-input-button {
     background-color: #ddd !important;
     color: #aaa !important;
 }
+.vanished {
+    color: #ddd !important;
+}
 .not-used {
     background-color: #fff !important;
 }
@@ -320,4 +323,8 @@ img.five {
     height : 1em;
     margin-left: 0.05em;
     margin-right: 0.15em;
+}
+
+#acknowledgement {
+    overflow:hidden;
 }
