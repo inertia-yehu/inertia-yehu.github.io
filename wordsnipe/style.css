@@ -10,7 +10,7 @@
   --white: #fff;
   --black: #000;
 
-  font-family: 'San Francisco', 'Noto Sans', 'Clear Sans', 'Helvetica Neue', Arial, 'BIZ UDGothic', sans-serif;
+  font-family: 'San Francisco', 'Noto Sans', Arial, 'BIZ UDGothic', sans-serif;
   font-size: 16px;
   --game-max-width: 500px;
   --opacity-50: rgba(255, 255, 255, 0.5);
@@ -24,6 +24,10 @@
       --tile-size: 30px;
       --tile-text: 20px;
     }
+}
+
+span.gojuon-area-wrapper, p:not(#slot>p):not(.example>p) {
+   font-family:  'Zen Kaku Gothic Antique';
 }
 
 body {
@@ -87,6 +91,7 @@ h1>img {
     margin: 2px;
     font-weight:bold;
     cursor: default;
+    font-family: 'Zen kaku Gothic New';
 }
 .slot-wrapper {
     width: 100%;
