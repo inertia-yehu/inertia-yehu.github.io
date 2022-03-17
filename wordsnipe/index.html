@@ -16,7 +16,7 @@
     </head>
     <body>
       <div id="wrapper">
-        <h1 style="margin-top:36px">ワードスナイプ</h1>
+          <h1><img src="./title2.png" alt="ワードスナイプ"></h1>
         <div id="wrapper-explain">
           <div class="work-description">
               <div id="button-close" onclick="close_it()">
@@ -24,11 +24,12 @@
               </div>
               <p style="margin-top: 1em">
                   ひらがな４字の言葉を当ててください。 <br>
-                  解答するたびに、ヒントとして文字に色がつきます。<br>
-                  解答には辞書にある単語しか入力できません。
+                  解答するたびに、文字にヒントとして色がつきます。<br>
+                  辞書にある単語しか入力できません。 <br>
+                  問題は日替わりです。
               </p>
               <hr style="margin:2em 0">
-              <p> 例：</p>
+              <p> 例：答えが「せいかい」のとき</p>
               <div class="example">
                 <p>
                   <span class="used">さ</span>
@@ -59,9 +60,6 @@
                 <p><b>そ</b> の字は正解に含まれませんが、
                 ５０音表で <b>そ</b> の隣にある字（こ、せ、と）のどれかが含まれるようです。</p>
               </div>
-              <p>
-                  答えは「せいかい」です。
-              </p>
               <p style="text-align:center">
                 <button id="close_bottom" onclick="close_it()"> 閉じる </button>
               </p>
@@ -119,6 +117,8 @@
               』<br>
               （東京大学松下達彦研究室・松下言語学習ラボ）<br>
             </p>
+            ・
+            <p>タイトルロゴにフォントワークス <a href="https://github.com/fontworks-fonts/Stick">ステッキ B</a> を用いています。</p>
         </div>
       </div>
       <script src="dict.js"></script>
